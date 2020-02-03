@@ -1,24 +1,22 @@
 import javax.mail.*;
 import java.io.IOException;
+import java.util.Properties;
 
 public class MailService {
     static Store store;
     static Folder inbox;
     static Message[] messages;
 
-    public static void connectToMail(UserProperties props) {
+    public static void connectToMail(UserProperties props) throws IOException {
         Session session = null;
+        session = Session.getDefaultInstance(UserProperties.getProperties(), null);
         try {
-            session = Session.getDefaultInstance(props.getProperties(), null);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
+            assert session != null;
             store = session.getStore("pop3s");
         } catch (NoSuchProviderException e) {
             e.printStackTrace();
         }
-        System.out.println("Connecting to " + props.host + "...");
+        System.out.print("Connecting to " + props.host + "...");
         try {
             store.connect(props.host, props.port, props.login, props.password);
         } catch (MessagingException e) {
@@ -44,9 +42,5 @@ public class MailService {
         inbox.close(false);
         store.close();
         System.exit(0);
-    }
-
-    public static Message[] getMessages() {
-        return messages;
     }
 }

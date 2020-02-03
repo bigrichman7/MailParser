@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Properties;
 
-public class UserProperties {
+public class UserProperties{
     //Переменные config.properties для почтового сервера
     final String login;
     final String password;
@@ -33,10 +33,10 @@ public class UserProperties {
         this.db_pass = getProperties().getProperty("db.password");
     }
 
-    public Properties getProperties() throws IOException {
+    public static Properties getProperties() throws IOException {
         Properties props = new Properties();
-        File jarPath = new File(MailParser.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-        String propertiesPath = jarPath.getParentFile().getAbsolutePath();
+        //File jarPath = new File(MailParser.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+        //String propertiesPath = jarPath.getParentFile().getAbsolutePath();
         //FileInputStream fis = new FileInputStream(propertiesPath + File.separator + "config.properties");
         FileInputStream fis = new FileInputStream("/home/mamba/IdeaProjects/MailParser/src/main/resources/config.properties");
         props.load(fis);
