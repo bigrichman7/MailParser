@@ -8,15 +8,15 @@ import java.io.*;
 
 public class FileSaver {
 
-    public String toSaveAttachment(BodyPart bodyPart) throws IOException, MessagingException {
+    public static String toSaveAttachment(BodyPart bodyPart) throws IOException, MessagingException {
         return saveAttachment(bodyPart);
     }
 
-    public String toSaveText(BodyPart bodyPart) throws IOException, MessagingException {
-        return saveText(bodyPart);
+    public static String toSaveText(Object content) throws IOException, MessagingException {
+        return saveText((String) content);
     }
 
-    private String saveAttachment(BodyPart part) throws IOException, MessagingException {
+    private static String saveAttachment(BodyPart part) throws IOException, MessagingException {
         InputStream is = part.getInputStream();
         String attachmentDir = "/home/mamba/IdeaProjects/MailParser/attachments" + File.separator;
         attachmentDir = generatorNames(attachmentDir, "attachment") + "_" + MimeUtility.decodeText(part.getFileName());
@@ -31,10 +31,10 @@ public class FileSaver {
         return attachmentDir;
     }
 
-    private String saveText(BodyPart part) throws IOException, MessagingException {
+    private static String saveText(String part) throws IOException, MessagingException {
         String textDir;
         String text;
-        Document doc = Jsoup.parse(part.getContent().toString());
+        Document doc = Jsoup.parse(part);
         text = doc.text();
         textDir = "/home/mamba/IdeaProjects/MailParser/messages" + File.separator;
         textDir = generatorNames(textDir, "text");
@@ -49,7 +49,7 @@ public class FileSaver {
         return textDir;
     }
 
-    private String generatorNames(String fieldDir, String fileType) {
+    private static String generatorNames(String fieldDir, String fileType) {
         String dir;
         File listFiles = new File(fieldDir);
         if (listFiles.listFiles().length == 0)

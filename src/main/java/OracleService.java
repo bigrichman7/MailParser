@@ -14,16 +14,10 @@ import java.util.Date;
 import oracle.jdbc.*;
 
 public class OracleService {
-    static UserProperties props;
     static Connection connection;
-    static boolean isConnected;
+    static boolean isConnected = false;
 
-    public OracleService(UserProperties props) throws IOException, MessagingException, SQLException {
-        OracleService.props = props;
-        isConnected = false;
-    }
-
-    public void connectToOracle(){
+    public static void connectToOracle(UserProperties props){
         try {
             String url = "jdbc:oracle:thin:@" + props.db_host + ":" + props.db_port + ":" + props.db_sid;
             System.out.println("Connecting to " + url + "...");
@@ -45,7 +39,7 @@ public class OracleService {
         System.out.println();
     }
 
-    public void write(Message[] messages) throws MessagingException, IOException, SQLException {
+    public static void write(Message[] messages, UserProperties props) throws MessagingException, IOException, SQLException {
         System.out.println("Writing to database...");
         System.out.println();
 
@@ -68,7 +62,7 @@ public class OracleService {
         }
     }
 
-    public void closeOracleConnection() throws SQLException {
+    public static void closeOracleConnection() throws SQLException {
         connection.close();
     }
 }

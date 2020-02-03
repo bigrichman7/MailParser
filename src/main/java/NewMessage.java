@@ -67,13 +67,14 @@ public class NewMessage {
         if (mimeMessage.isMimeType("multipart/mixed") || mimeMessage.isMimeType("multipart/alternative")) {
             Multipart multipart = (Multipart) mimeMessage.getContent();
             multipart_func(multipart);
+        } else if (mimeMessage.isMimeType("text/html") || mimeMessage.isMimeType("text/plain")) {
+            text_field_directory = FileSaver.toSaveText(mimeMessage.getContent());
         }
     }
 
     //Функция для разбора Multipart
     private void multipart_func(Multipart multiPart) throws MessagingException, IOException {
         text_field_directory = "";
-        FileSaver fileSaver = new FileSaver();
         for (int i = 0; i < multiPart.getCount(); i++) {
             BodyPart bodyPart = multiPart.getBodyPart(i);
             if (bodyPart.isMimeType("multipart/alternative")) {
@@ -81,12 +82,12 @@ public class NewMessage {
                 multipart_func(multiPart_alternative);
             }
             if (Part.ATTACHMENT.equalsIgnoreCase(bodyPart.getDisposition())) {
-                attachment_field_directory = fileSaver.toSaveAttachment(bodyPart);
+                attachment_field_directory = FileSaver.toSaveAttachment(bodyPart);
                 continue;
             }
             if (bodyPart.isMimeType("text/html")) {
                 if (!bodyPart.getContent().equals("") && !bodyPart.getContent().equals("<![endif]-->"))
-                    text_field_directory = fileSaver.toSaveText(bodyPart);
+                    text_field_directory = FileSaver.toSaveText(bodyPart.getContent());
             }
         }
     }

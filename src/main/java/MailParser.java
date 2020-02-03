@@ -6,13 +6,12 @@ public class MailParser {
 
     public static void main(String[] args) throws IOException, MessagingException, SQLException {
         UserProperties props = new UserProperties();
-        MailConnection mailConnection = new MailConnection(props);
-        OracleService oracleService = new OracleService(props);
+        MailService.connectToMail(props);
 
-        oracleService.connectToOracle();
-        oracleService.write(mailConnection.getMessages());
+        OracleService.connectToOracle(props);
+        OracleService.write(MailService.getMessages(), props);
 
-        mailConnection.closeMailConnection();
-        oracleService.closeOracleConnection();
+        MailService.closeMailConnection();
+        OracleService.closeOracleConnection();
     }
 }

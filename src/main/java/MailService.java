@@ -1,21 +1,12 @@
 import javax.mail.*;
 import java.io.IOException;
 
-public class MailConnection {
-    Store store;
-    Folder inbox;
-    Message[] messages;
-    UserProperties props;
+public class MailService {
+    static Store store;
+    static Folder inbox;
+    static Message[] messages;
 
-    public MailConnection(UserProperties props) throws IOException, MessagingException {
-        this.props = props;
-        connectToMail();
-        openINBOX();
-        System.out.println("Finded " + messages.length + " new messages");
-        System.out.println();
-    }
-
-    private void connectToMail() {
+    public static void connectToMail(UserProperties props) {
         Session session = null;
         try {
             session = Session.getDefaultInstance(props.getProperties(), null);
@@ -34,21 +25,28 @@ public class MailConnection {
             e.printStackTrace();
         }
         System.out.println("Connected!");
+        try {
+            openINBOX();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Finded " + messages.length + " new messages");
+        System.out.println();
     }
 
-    private void openINBOX() throws MessagingException {
+    private static void openINBOX() throws MessagingException {
         inbox = store.getFolder("INBOX");
         inbox.open(Folder.READ_WRITE);
         messages = inbox.getMessages();
     }
 
-    public void closeMailConnection() throws MessagingException {
-        inbox.close(true);
+    public static void closeMailConnection() throws MessagingException {
+        inbox.close(false);
         store.close();
         System.exit(0);
     }
 
-    public Message[] getMessages() {
+    public static Message[] getMessages() {
         return messages;
     }
 }
