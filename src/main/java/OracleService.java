@@ -1,23 +1,12 @@
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-
 import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeUtility;
-import javax.print.Doc;
 import java.io.*;
 import java.sql.*;
-import java.util.Arrays;
-import java.util.Date;
-
-import oracle.jdbc.*;
 
 public class OracleService {
     static Connection connection;
     static boolean isConnected = false;
 
-    public static void connectToOracle(UserProperties props){
+    public static void connectToOracle(OracleProperties props){
         try {
             String url = "jdbc:oracle:thin:@" + props.db_host + ":" + props.db_port + ":" + props.db_sid;
             System.out.println("Connecting to " + url + "...");
@@ -39,9 +28,8 @@ public class OracleService {
         System.out.println();
     }
 
-    public static void write(Message[] messages, UserProperties props) throws MessagingException, IOException, SQLException {
-        System.out.println("Writing to database...");
-        System.out.println();
+    public static void write(Message[] messages, OracleProperties props) throws MessagingException, IOException, SQLException {
+        System.out.print("Writing to database... ");
 
         for (int i = 0; i < messages.length; i++) {
             NewMessage newMessage = new NewMessage(props, messages[i]);
@@ -60,6 +48,8 @@ public class OracleService {
                 System.out.println(e.getMessage());
             }
         }
+        System.out.println("Successful!");
+        System.out.println();
     }
 
     public static void closeOracleConnection() throws SQLException {

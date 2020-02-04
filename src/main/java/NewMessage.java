@@ -1,6 +1,3 @@
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -8,10 +5,9 @@ import javax.mail.internet.MimeUtility;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Properties;
 
 public class NewMessage {
-    UserProperties props;
+    OracleProperties props;
     Message message;
     //Переменные полученного сообщения
     private String to_email;
@@ -50,7 +46,7 @@ public class NewMessage {
         return attachment_field_directory;
     }
 
-    public NewMessage(UserProperties props, Message message) throws IOException, MessagingException {
+    public NewMessage(OracleProperties props, Message message) throws IOException, MessagingException {
         this.props = props;
         this.message = message;
         setParametersForNewMessage();
@@ -59,7 +55,7 @@ public class NewMessage {
 
     private void setParametersForNewMessage() throws MessagingException, IOException {
         MimeMessage mimeMessage = (MimeMessage) message;
-        to_email = props.login;
+        to_email = MailProperties.getInstance().getLogin();
         setFrom_email(mimeMessage.getFrom());
         subject = MimeUtility.decodeText(mimeMessage.getSubject());
         mail_date = mimeMessage.getSentDate();

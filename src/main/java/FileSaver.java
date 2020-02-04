@@ -18,7 +18,7 @@ public class FileSaver {
 
     private static String saveAttachment(BodyPart part) throws IOException, MessagingException {
         InputStream is = part.getInputStream();
-        String attachmentDir = "/home/mamba/IdeaProjects/MailParser/attachments" + File.separator;
+        String attachmentDir = GetProperties.getProperties().getProperty("dir.attachments") + File.separator;
         attachmentDir = generatorNames(attachmentDir, "attachment") + "_" + MimeUtility.decodeText(part.getFileName());
         File f = new File(attachmentDir);
         FileOutputStream fos = new FileOutputStream(f);
@@ -36,7 +36,7 @@ public class FileSaver {
         String text;
         Document doc = Jsoup.parse(part);
         text = doc.text();
-        textDir = "/home/mamba/IdeaProjects/MailParser/messages" + File.separator;
+        textDir = GetProperties.getProperties().getProperty("dir.messages") + File.separator;
         textDir = generatorNames(textDir, "text");
         try {
             FileWriter writer = new FileWriter(textDir, false);
