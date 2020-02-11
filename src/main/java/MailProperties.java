@@ -22,6 +22,10 @@ public class MailProperties {
         nextMail();
     }
 
+    public int getCounterMail() {
+        return counterMail;
+    }
+
     public void nextMail(){
         try {
             Properties props = GetProperties.getProperties();

@@ -36,8 +36,8 @@ public class MailService {
         messages = inbox.getMessages();
     }
 
-    public static void closeMailConnection() throws MessagingException {
-        inbox.close(false);
+    public static void closeMailConnection() throws MessagingException, IOException {
+        inbox.close(Boolean.parseBoolean(GetProperties.getProperties().getProperty("mail.remover" + MailProperties.getInstance().getCounterMail())));
         store.close();
     }
 }
