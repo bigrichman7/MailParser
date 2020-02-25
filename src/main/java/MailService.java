@@ -1,7 +1,12 @@
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.mail.*;
 import java.io.IOException;
 
 public class MailService {
+    private Logger log = LoggerFactory.getLogger(MailService.class);
+
     static Store store;
     static Folder inbox;
     public static Message[] messages;

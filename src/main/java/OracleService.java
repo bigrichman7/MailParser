@@ -2,6 +2,7 @@ import javax.mail.*;
 import java.io.*;
 import java.sql.*;
 
+
 public class OracleService {
     static Connection connection;
     static boolean isConnected = false;
