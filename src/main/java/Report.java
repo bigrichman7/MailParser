@@ -15,17 +15,14 @@ public class Report {
 
     public static String getReport() {
         String report;
-        if (OracleService.isConnected) {
-            if (countAllMessages != 0)report = countAllMessages + " new messages was wrote successfully";
-            else report = "No messages have been wrote";
-            if (mailServices.size() != 0) {
-                for (MailService oneService :
-                        mailServices) {
-                    report = report + "\n" + oneService.props.getLogin() + " hasn't been connected";
-                }
+        if (countAllMessages != 0) report = countAllMessages + " messages was wrote successfully";
+        else report = "No messages have been wrote";
+        if (mailServices.size() != 0) {
+            for (MailService oneService :
+                    mailServices) {
+                report = report + "\n" + oneService.props.getLogin() + " hasn't been connected";
             }
-        } else
-            report = "Check database sittings" + "\n";
+        }
         return report;
     }
 }

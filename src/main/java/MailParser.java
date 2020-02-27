@@ -10,11 +10,15 @@ public class MailParser {
     public static void main(String[] args) throws IOException, MessagingException, SQLException, InterruptedException {
         OracleService.connectToOracle(OracleProperties.getInstance());
 
-        ExecutorService executorService = Executors.newFixedThreadPool(Integer.parseInt(GetProperties.getProperties().getProperty("countThreads")));
-        while (MailProperties.isNextMail())
-            executorService.submit(new MailService(new MailProperties()));
-        executorService.shutdown();
-        executorService.awaitTermination(1, TimeUnit.DAYS);
-        System.out.println(Report.getReport());
+        if (OracleService.isConnected) {
+            ExecutorService executorService = Executors.newFixedThreadPool(Integer.parseInt(GetProperties.getProperties().getProperty("countThreads")));
+            while (MailProperties.isNextMail())
+                executorService.submit(new MailService(new MailProperties()));
+            executorService.shutdown();
+            executorService.awaitTermination(1, TimeUnit.DAYS);
+            System.out.println(Report.getReport());
+        } else {
+            System.out.println("Check database sittings");
+        }
     }
 }
