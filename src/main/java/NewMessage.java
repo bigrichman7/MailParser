@@ -4,6 +4,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeUtility;
 import java.io.*;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
 public class NewMessage {
@@ -55,7 +56,7 @@ public class NewMessage {
 
     private void setParametersForNewMessage() throws MessagingException, IOException {
         MimeMessage mimeMessage = (MimeMessage) message;
-        to_email = MailProperties.getInstance().getLogin();
+        to_email = Arrays.toString(mimeMessage.getAllRecipients());
         setFrom_email(mimeMessage.getFrom());
         subject = MimeUtility.decodeText(mimeMessage.getSubject());
         mail_date = mimeMessage.getSentDate();

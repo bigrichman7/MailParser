@@ -14,8 +14,9 @@ public class OracleService {
             connection = DriverManager.getConnection(url, props.db_login, props.db_pass);
             if (connection.equals(null))
                 isConnected = false;
-            else
+            else {
                 isConnected = true;
+            }
         } catch (ClassNotFoundException e) {
             System.out.println("ClassNotFoundException");
             isConnected = false;
@@ -23,14 +24,11 @@ public class OracleService {
             System.out.println("SQLException\n" + e.getMessage());
             isConnected = false;
         }
-        if (isConnected) System.out.println("Connected!");
+        if (isConnected) System.out.println("Connected! \n\nWriting to database...");
         else System.out.println("Failed!");
-        System.out.println();
     }
 
-    public static void write(Message[] messages, OracleProperties props) throws MessagingException, IOException, SQLException {
-        System.out.print("Writing to database... ");
-
+    public void write(Message[] messages, OracleProperties props) throws MessagingException, IOException, SQLException {
         for (int i = 0; i < messages.length; i++) {
             NewMessage newMessage = new NewMessage(props, messages[i]);
             String insertTableSQL = "INSERT INTO MAIL"
@@ -48,8 +46,6 @@ public class OracleService {
                 System.out.println(e.getMessage());
             }
         }
-        System.out.println("Successful!");
-        System.out.println();
     }
 
     public static void closeOracleConnection() throws SQLException {

@@ -1,26 +1,20 @@
 import javax.mail.*;
 import java.sql.SQLException;
 import java.io.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class MailParser {
 
-    public static void main(String[] args) throws IOException, MessagingException, SQLException {
-        MailProperties mailProperties = MailProperties.getInstance();
-        OracleProperties props = OracleProperties.getInstance();
+    public static void main(String[] args) throws IOException, MessagingException, SQLException, InterruptedException {
+        OracleService.connectToOracle(OracleProperties.getInstance());
 
-        OracleService.connectToOracle(props);
-
-        do {
-            MailService.connectToMail(mailProperties);
-            OracleService.write(MailService.messages, props);
-            MailService.closeMailConnection();
-            try {
-                MailProperties.getInstance().nextMail();
-            } catch (Exception e) {
-                return;
-            }
-        } while (MailProperties.isNextMail);
-
-        OracleService.closeOracleConnection();
+        ExecutorService executorService = Executors.newFixedThreadPool(Integer.parseInt(GetProperties.getProperties().getProperty("countThreads")));
+        while (MailProperties.isNextMail())
+            executorService.submit(new MailService(new MailProperties()));
+        executorService.shutdown();
+        executorService.awaitTermination(1, TimeUnit.DAYS);
+        System.out.println(Report.getReport());
     }
 }
